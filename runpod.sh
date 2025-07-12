@@ -13,5 +13,5 @@ uv venv
 source .venv/bin/activate
 uv pip install -r requirements.txt
 
-pip install huggingface_hub
-huggingface_hub login # this only works if you have the token in plain text (please fix this)
+uv pip install huggingface_hub
+huggingface-cli login # this only works if you have the token in plain text (please fix this)
