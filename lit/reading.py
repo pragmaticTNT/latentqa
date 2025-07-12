@@ -189,19 +189,21 @@ def ForCausalLMLossPatched(
 
 
 def main(**kwargs):
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     from lit.configs.interpret_config import interpret_config
     args = interpret_config()
     update_config(args, **kwargs)
 
     PreTrainedModel.loss_function = staticmethod(ForCausalLMLossPatched)
     tokenizer = get_tokenizer(args.target_model_name)
+    print(f"In main call: {args.decoder_model_name = }")
     decoder_model = get_model(
         args.target_model_name,
         tokenizer,
         load_peft_checkpoint=args.decoder_model_name,
-        device="cuda:1",
+        device=device,
     )
-    target_model = get_model(args.target_model_name, tokenizer, device="cuda:0")
+    target_model = get_model(args.target_model_name, tokenizer, device=device)
     dialogs = [[args.prompt]]
     questions = QUESTIONS
     loss = interpret(target_model, decoder_model, tokenizer, dialogs, questions, args, generate=False,

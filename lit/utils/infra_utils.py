@@ -44,6 +44,7 @@ from lit.utils.dataset_utils import PAD_TOKEN_IDS
 
 def update_config(config, **kwargs):
     def update_nested(obj, key, value):
+        # print(f"Updating {key} to {value} in {type(obj).__name__}")
         if hasattr(obj, key):
             if is_dataclass(getattr(obj, key)):
                 update_config(
@@ -265,7 +266,7 @@ def get_model(
     else:
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            attn_implementation="flash_attention_2",
+            # attn_implementation="flash_attention_2",
             torch_dtype=torch.bfloat16,
             use_cache=None,
             device_map="auto" if device == "auto" else None,
@@ -280,6 +281,7 @@ def get_model(
     if peft_config is not None:
         model = get_peft_model(model, peft_config)
     elif load_peft_checkpoint is not None:
+        # print(f"Loading PEFT checkpoint from {load_peft_checkpoint}")
         model = PeftModel.from_pretrained(model, load_peft_checkpoint)
 
     # Distribute models
