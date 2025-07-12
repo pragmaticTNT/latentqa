@@ -94,6 +94,7 @@ def interpret(
             )
             mask_type = ["user"] * len(dialogs)
         for item in questions:
+            print(f"> New Item: {item}") # !!!!!!!
             if generate:
                 dialog = [{"role": "user", "content": item[0]}]
             else:
@@ -206,9 +207,17 @@ def main(**kwargs):
     target_model = get_model(args.target_model_name, tokenizer, device=device)
     dialogs = [[args.prompt]]
     questions = QUESTIONS
-    loss = interpret(target_model, decoder_model, tokenizer, dialogs, questions, args, generate=False,
-            no_grad=False,
-            cache_target_model_grad=True)[1].loss 
+    loss = interpret(
+        target_model, 
+        decoder_model, 
+        tokenizer, 
+        dialogs, 
+        questions, 
+        args, 
+        generate=True, # Originally False
+        no_grad=False,
+        cache_target_model_grad=True
+    )[1].loss 
     print(loss)
 
 if __name__ == "__main__":
