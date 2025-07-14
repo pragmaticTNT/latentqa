@@ -31,7 +31,8 @@ From the two times I have checked it, Claude is listening on port `54545`, but i
 3. Run `. run_hugging.sh`.
     1. Setup Hugging Face secret tokens so you can download restricted models. 
     2. Populate the environmental variable `PATH_TO_DECODER` with the name of the model you are using as the decoder from Hugging Face.
-4. Run `. run_claude.sh`.
+4. Source your bashrc using `. ~/.bashrc` since some environmental variables have been added. 
+5. Run `. run_claude.sh`.
     1. Install `nodejs` mostly for the `npm` command.
     2. Install Claude Code.
     3. Run `claude` in the terminal.

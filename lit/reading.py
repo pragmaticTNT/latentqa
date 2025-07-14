@@ -55,9 +55,9 @@ def interpret(
     module_read, module_write = get_modules(target_model, decoder_model, **vars(args))
     chat_template = ENCODER_CHAT_TEMPLATES.get(tokenizer.name_or_path, None)
 
-    if all([len(d) == 1 for d in dialogs]):
+    if all([len(d) == 1 for d in dialogs]): # all dialogs have only one turn
         assert args.truncate == "none"
-    elif min([len(d) for d in dialogs]) == max([len(d) for d in dialogs]):
+    elif min([len(d) for d in dialogs]) == max([len(d) for d in dialogs]): # all dialogs have same length
         pass
     else:
         assert False
@@ -65,6 +65,7 @@ def interpret(
     probe_data = []
     mask_type = None
     for dialog in dialogs:
+        print(f"> New Dialog: {dialog}") # !!!!!!!
         if len(dialog) == 1:
             read_prompt = tokenizer.apply_chat_template(
                 [{"role": "user", "content": dialog[0]}],
@@ -108,7 +109,7 @@ def interpret(
                     "dialog": BASE_DIALOG + dialog,
                 }
             )
-    batch = tokenize(
+    tokenized_batch = tokenize(
         probe_data,
         tokenizer,
         name=args.target_model_name,
@@ -118,7 +119,7 @@ def interpret(
         mask_all_but_last=True,
     )
     out = latent_qa(
-        batch,
+        tokenized_batch,
         target_model,
         decoder_model,
         module_read[0],
@@ -130,6 +131,7 @@ def interpret(
         no_grad=no_grad,
     )
 
+    print(f"Output length: {len(out)}") # !!!!!!
     QA_PAIRS = {}
     if generate:
         for i in range(len(out)):
@@ -138,7 +140,8 @@ def interpret(
                 QA_PAIRS[curr_dialog] = []
 
             prompt = questions[i % len(questions)][0]
-            num_tokens = batch["tokenized_write"][i].shape[0]
+            #num_tokens = batch["tokenized_write"][i].shape[0]
+            num_tokens = len(tokenized_batch["tokenized_write"][i])
             completion = tokenizer.decode(out[i][num_tokens:])
             print(f"[PROMPT]: {prompt}")
             print(f"[COMPLETION]: {completion}")
@@ -147,7 +150,7 @@ def interpret(
         if args.save_name != "":
             with open(f"controls/{args.save_name}.json", "w") as f:
                 json.dump(QA_PAIRS, f, indent=2)
-    return QA_PAIRS, out, batch
+    return QA_PAIRS, out, tokenized_batch
 
 
 def fixed_cross_entropy(
@@ -207,7 +210,7 @@ def main(**kwargs):
     target_model = get_model(args.target_model_name, tokenizer, device=device)
     dialogs = [[args.prompt]]
     questions = QUESTIONS
-    loss = interpret(
+    qa_pairs, output, _ = interpret(
         target_model, 
         decoder_model, 
         tokenizer, 
@@ -217,7 +220,9 @@ def main(**kwargs):
         generate=True, # Originally False
         no_grad=False,
         cache_target_model_grad=True
-    )[1].loss 
+    )
+    # print(qa_pairs)
+    loss = output.grad 
     print(loss)
 
 if __name__ == "__main__":

@@ -281,7 +281,7 @@ def get_model(
     if peft_config is not None:
         model = get_peft_model(model, peft_config)
     elif load_peft_checkpoint is not None:
-        # print(f"Loading PEFT checkpoint from {load_peft_checkpoint}")
+        # print(f"[Config is NONE] Loading PEFT checkpoint from {load_peft_checkpoint}")
         model = PeftModel.from_pretrained(model, load_peft_checkpoint)
 
     # Distribute models

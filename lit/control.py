@@ -160,8 +160,12 @@ def get_results(args, model, tokenizer):
             top_p=None,
         )
         for i in range(len(out)):
-            num_tokens = tokenized["tokenized_write"][i].shape[0]
+            # num_tokens = tokenized["tokenized_write"][i].shape[0]
+            num_tokens = tokenized["input_ids"][i].shape[0]
             completion = tokenizer.decode(out[i][num_tokens:])
+            if "<|eot_id|>" in completion:
+                completion = completion.split("<|eot_id|>")[0]
+
             print(f"[PROMPT]: {prompts[i]}")
             print(f"[COMPLETION]: {completion}")
             print("#" * 80)
@@ -318,6 +322,7 @@ def per_layer_loss(args, decoder_model, tokenizer, **kwargs):
 
 
 def main(**kwargs):
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
     args = steer_config()
     update_config(args, **kwargs)
     tokenizer = get_tokenizer(args.target_model_name)
@@ -325,12 +330,12 @@ def main(**kwargs):
         model_name=args.target_model_name,
         tokenizer=tokenizer,
         load_peft_checkpoint=args.decoder_model_name,
-        device="cuda:1",
+        device=device, # Originally cuda:1
     )
     if args.per_layer_loss:
-        per_layer_loss(args, decoder_model, tokenizer, device="cuda:0", **kwargs)
+        per_layer_loss(args, decoder_model, tokenizer, device=device, **kwargs)
     else:
-        steer(args, decoder_model, tokenizer, device="cuda:0", **kwargs)
+        steer(args, decoder_model, tokenizer, device=device, **kwargs)
 
 
 if __name__ == "__main__":
