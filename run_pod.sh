@@ -26,13 +26,6 @@ git config --global credential.helper store
 echo ">>> Git configured successfully!"
 echo ""
 
-echo ">>> Loading environment variables..."
-uv pip install huggingface_hub
-export HF_TOKEN=$(strings /proc/1/environ | grep "HF_TOKEN=" | cut -d'=' -f2)
-huggingface-cli login --token $HF_TOKEN
-echo ">>> Environment variables loaded successfully!"
-echo ""
-
 echo ">>> Total setup time: $((SECONDS - START_TIME)) seconds"
 
 # huggingface-cli login # this only works if you have the token in plain text (please fix this)
