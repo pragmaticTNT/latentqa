@@ -83,6 +83,10 @@ def get_dataset(args, tokenizer, qa_per_layer=False):
             )
             for read_prompt in [read_prompt_0, read_prompt_1]:
                 formatted_data.append({"read_prompt": read_prompt, "dialog_idx": idx})
+    # print(f"Number of entries {len(formatted_data)}") # !!!!!!!
+    # print(f"Layers to optimize: {args.layers_to_optimize}") # !!!!!!!
+    # for i, data in enumerate(formatted_data[:6]):
+    #     print(f">>> Data {i}: {data}") # !!!!!!!
     np.random.shuffle(formatted_data)
     formatted_data = formatted_data[: args.samples]
     if qa_per_layer:

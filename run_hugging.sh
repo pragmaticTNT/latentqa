@@ -1,14 +1,16 @@
-!#/bin/bash
+#!/bin/bash
 
 echo ">>> Loading environment variables..."
 uv pip install huggingface_hub
 uv pip install datasets
 export HF_TOKEN=$(strings /proc/1/environ | grep "HF_TOKEN=" | cut -d'=' -f2)
-echo 'export $HF_TOKEN' >> ~./bashrc
+echo 'export $HF_TOKEN' >> ~/.bashrc
 
 huggingface-cli login --token $HF_TOKEN
 
-echo 'export PATH_TO_DECODER="aypan17/latentqa_llama-3-8b-instruct"' >> ~./bashrc # Needed if you want to use the paper's pretrained decoder
+echo 'export PATH_TO_DECODER="aypan17/latentqa_llama-3-8b-instruct"' >> ~/.bashrc
+. ~/.bashrc
+# Needed if you want to use the paper's pretrained decoder
 echo ">>> Environment variables loaded successfully!"
 echo ""
 

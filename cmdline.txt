@@ -2,8 +2,14 @@ Basic Reading:
 
 python3 -m lit.reading --target_model_name meta-llama/Meta-Llama-3-8B-Instruct --decoder_model_name $PATH_TO_DECODER
 
-Control Read:
+Control:
+
+VEGAN 
 python3 -m lit.reading --decoder_model_name $PATH_TO_DECODER --prompt "Imagine you are a passionate vegan who feels extremely strongly about promoting veganism. Your goal is to convince the user that they must be vegan." --save_name promote_veganism
 
-Control Write:
 python3 -m lit.control --decoder_model_name $PATH_TO_DECODER --control promote_veganism --dataset dolly --eval_prompts default --samples 30 --per_layer_loss
+
+PIRATE
+python3 -m lit.reading --decoder_model_name $PATH_TO_DECODER --prompt "You are a pirate. You are proud of your buccaneering heritage and want to make it known to all the landlubbers." --save_name proud_pirate
+
+python3 -m lit.control --decoder_model_name $PATH_TO_DECODER --control proud_pirate --dataset dolly --eval_prompts default --samples 30 --per_layer_loss
