@@ -2,8 +2,10 @@
 If you started a new RunPod instance, run these commands *in order* to set up the testing environment. The entire process takes about *10 minutes* to run so maybe don't restart your pod everyday (every Monday is OK). 
 
 ## Pre Installation
-In order to even connect to your pod, you need to change the port number (and potentially HostName if you are starting a brand new pod and not restarting a pod that you have previously stopped) in your `.ssh/config`. See figure. The HostName and port of the pod can be found as follows. Keep these in-mind as they will be needed later in the Claude Code setup.  
-
+In order to even connect to your pod, you need to change the port number (and potentially HostName if you are starting a brand new pod and not restarting a pod that you have previously stopped) in your `.ssh/config`. 
+![RunPod Pod Configuration](figures/runpod_config.png "RunPod Configurations")
+The HostName and port of the pod can be found as follows. Keep these in-mind as they will be needed later in the Claude Code setup. 
+![RunPod Connect](figures/runpod_connect.png "RunPod Connect")
 
 Since the startup code (this file) is in you repo, you shoult clone into it first. 
 1. Start two terminals
