@@ -39,3 +39,19 @@ From the two times I have checked it, Claude is listening on port `54545`, but i
     2. Install Claude Code.
     3. Run `claude` in the terminal.
     4. You will get a bunch of setup instructions, but the most important is linking your claude.ai account (with the pro subscription). You will get a weblink which you will need to copy into a website on your local machine. Go through the links and --- if you set things up properly in the pre-installation step 4, you should be able to tunnel back to your remote machine and get a key which you can then past into the terminal of your remote machine. 
+
+# Others
+## Tiny Benchmarks
+In order to run Tiny Benchmarks, you need to do the following. 
+```bash
+# Clone without submodules
+git clone --depth 1 https://github.com/felipemaiapolo/tinyBenchmarks.git
+cd tinyBenchmarks
+
+# Remove the problematic submodule reference
+rm -rf .gitmodules tutorials/py-irt
+
+# Install
+uv pip install .
+cd ..
+```

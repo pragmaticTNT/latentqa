@@ -222,8 +222,8 @@ def main(**kwargs):
         cache_target_model_grad=True
     )
     # print(qa_pairs)
-    loss = output.grad 
-    print(loss)
+    # loss = output.grad 
+    # print(loss)
 
 if __name__ == "__main__":
     fire.Fire(main)
